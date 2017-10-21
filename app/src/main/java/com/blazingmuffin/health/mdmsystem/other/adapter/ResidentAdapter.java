@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.blazingmuffin.health.mdmsystem.R;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
+import com.blazingmuffin.health.mdmsystem.other.repositories.ResidentRepository;
+import com.couchbase.lite.Document;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 
@@ -17,7 +19,14 @@ import com.couchbase.lite.QueryRow;
  */
 
 public class ResidentAdapter extends RecyclerView.Adapter<ResidentAdapter.ResidentViewHolder> {
+    private final IRecyclerViewClickListener mRecyclerViewClickListener;
+    private final ResidentRepository mResidentRepository;
     private QueryEnumerator mResidents;
+
+    public ResidentAdapter(IRecyclerViewClickListener iRecyclerViewClickListener, ResidentRepository residentRepository) {
+        this.mRecyclerViewClickListener = iRecyclerViewClickListener;
+        this.mResidentRepository = residentRepository;
+    }
 
     @Override
     public ResidentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,7 +41,8 @@ public class ResidentAdapter extends RecyclerView.Adapter<ResidentAdapter.Reside
     public void onBindViewHolder(ResidentViewHolder holder, int position) {
         QueryRow row = mResidents.getRow(position);
         ResidentEntity residentEntity = new ResidentEntity(row.getDocument());
-        holder.mFullName.setText(residentEntity.getFullName());
+        String display = String.format("%1$s %2$d", residentEntity.getFirstName(), position);
+        holder.mFullName.setText(display);
 //        holder.mFullName.setText(residentEntity.getId().toString());
     }
 
@@ -51,11 +61,24 @@ public class ResidentAdapter extends RecyclerView.Adapter<ResidentAdapter.Reside
         return this.mResidents;
     }
 
-    public class ResidentViewHolder extends RecyclerView.ViewHolder {
+    public class ResidentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mFullName;
         public ResidentViewHolder(View view) {
             super(view);
             mFullName = view.findViewById(R.id.tv_item_resident_full_name);
+            view.setOnClickListener(this);
         }
+        @Override
+        public void onClick(View v) {
+            int itemIndex = getAdapterPosition();
+            Document residentDocument = mResidents.getRow(itemIndex).getDocument();
+//            ResidentEntity residentEntity = mResidentRepository.get(Integer.toString(itemIndex));
+            ResidentEntity residentEntity = new ResidentEntity(residentDocument);
+            mRecyclerViewClickListener.onRecyclerViewClickListener(residentEntity);
+        }
+    }
+
+    public interface IRecyclerViewClickListener {
+        void onRecyclerViewClickListener(ResidentEntity residentEntity);
     }
 }

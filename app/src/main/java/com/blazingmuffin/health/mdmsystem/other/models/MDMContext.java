@@ -15,25 +15,27 @@ import java.io.IOException;
  */
 
 public class MDMContext {
-    private static Database database;
-
-    private static synchronized Manager Manager(Context context) {
-        Manager manager = null;
+    private static Database mDatabase;
+    private static Manager mManager;
+    public static synchronized Manager Manager(Context context) {
         try {
-            manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
+            if (mManager == null) {
+                mManager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return manager;
+        return mManager;
     }
 
     public static synchronized Database Instance(Context context) {
         try {
-            if (database == null)
-                database = MDMContext.Manager(context).getDatabase(context.getString(R.string.general_database_name));
+            if (mDatabase == null) {
+                mDatabase = MDMContext.Manager(context).getDatabase(context.getString(R.string.general_database_name));
+            }
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
-        return database;
+        return mDatabase;
     }
 }

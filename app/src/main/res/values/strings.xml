@@ -2,6 +2,13 @@
     <string name="app_name">MDM System</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="general_database_name">mdm</string>
+    <string name="general_resident_id">resident-id</string>
+
+    <string name="tag_resident_details_fragment">resident-details</string>
+    <string name="tag_resident_details_fragment_backstack">resident-details-backstack</string>
+    <string name="tag_resident_fragment">resident</string>
+    <string name="tag_settings_fragment">settings</string>
+
     <string name="general_default_sgw">http://kristhiantiu.com:4984/curis-syncgw</string>
     <string name="button_save">Save</string>
     <string name="drawer_open">open</string>

@@ -3,6 +3,8 @@ package com.blazingmuffin.health.mdmsystem;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,9 +32,19 @@ import io.reactivex.disposables.Disposable;
  * Created by lenovo on 10/21/2017.
  */
 
-public class ResidentFragment extends Fragment{
+public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyclerViewClickListener {
+    private RecyclerView mRecyclerView;
     private ResidentAdapter mResidentAdapter;
 
+    private FragmentManager mManager;
+
+    private MainActivity mMainActivity;
+
+    private ResidentRepository mResidentRepository;
+
+//    private Button  mAdd,
+//                    mEdit,
+//                    mDelete;
     private Disposable mAddClicks;
     private Disposable mQueryChanges;
     private Disposable mDatabaseChanges;
@@ -42,11 +54,14 @@ public class ResidentFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resident_layout, container, false);
-        RecyclerView mRecyclerView = view.findViewById(R.id.rv_resident_fragment);
+        mRecyclerView = view.findViewById(R.id.rv_resident_fragment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mResidentAdapter = new ResidentAdapter();
+
+        mMainActivity = (MainActivity) getActivity();
+
+        mResidentAdapter = new ResidentAdapter(this, mMainActivity.getResidentRepository());
         mRecyclerView.setAdapter(mResidentAdapter);
 
         mAddClicks = RxView.clicks(view.findViewById(R.id.btn_resident_add))
@@ -61,6 +76,32 @@ public class ResidentFragment extends Fragment{
                             residentRepository.create(residentEntity);
                         }
                 );
+        mManager = ((MainActivity) getActivity()).getManager();
+
+//        mEdit = (Button) view.findViewById(R.id.btn_resident_edit);
+//        mDelete = (Button) view.findViewById(R.id.btn_resident_delete);
+
+        mResidentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
+
+//
+//        mEdit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ResidentEntity residentEntity = mResidentRepository.get("45e693d0-833e-45c4-85e6-1734e36a8312");
+//                residentEntity.setFirstName("Arvin");
+//                BasicUpdatable basicUpdatable = new BasicUpdatable(MDMContext.Instance(getActivity()));
+//                mResidentRepository.setIUpdatable(basicUpdatable);
+//                mResidentRepository.update(residentEntity);
+//            }
+//        });
+//
+//        mDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ResidentEntity residentEntity = mResidentRepository.get("45e693d0-833e-45c4-85e6-1734e36a8312");
+//                mResidentRepository.delete(residentEntity);
+//            }
+//        });
 
         Database db = MDMContext.Instance(getContext());
         com.couchbase.lite.View cview = db.getView(ResidentEntity.VIEW);
@@ -80,6 +121,7 @@ public class ResidentFragment extends Fragment{
         }).observeOn(AndroidSchedulers.mainThread())
         .subscribe(e ->{
             Toast.makeText(getActivity(), "DB CHANGE", Toast.LENGTH_SHORT).show();
+
         });
 
         mQuery = cview.createQuery().toLiveQuery();
@@ -89,6 +131,7 @@ public class ResidentFragment extends Fragment{
         }).observeOn(AndroidSchedulers.mainThread())
         .subscribe(e -> {
             Toast.makeText(getActivity(), "Updated..." + e.getRows().getCount(), Toast.LENGTH_LONG).show();
+            mResidentAdapter.setResidents(e.getRows());
         });
 
         return view;
@@ -101,5 +144,17 @@ public class ResidentFragment extends Fragment{
         mQueryChanges.dispose();
         mDatabaseChanges.dispose();
         mQuery.stop();
+    }
+
+    @Override
+    public void onRecyclerViewClickListener(ResidentEntity residentEntity) {
+        mMainActivity.setResidentEntity(residentEntity);
+
+        ResidentDetailsFragment residentDetailsFragment = new ResidentDetailsFragment();
+        FragmentTransaction fragmentTransaction = mManager.beginTransaction();
+        fragmentTransaction.add(R.id.linear_fragment_container, residentDetailsFragment,
+                getString(R.string.tag_resident_details_fragment));
+        fragmentTransaction.addToBackStack(getString(R.string.tag_resident_details_fragment_backstack));
+        fragmentTransaction.commit();
     }
 }

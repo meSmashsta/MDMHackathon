@@ -17,6 +17,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.blazingmuffin.health.mdmsystem.other.models.MDMContext;
+import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
+import com.blazingmuffin.health.mdmsystem.other.repositories.ResidentRepository;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseOptions;
@@ -50,9 +53,9 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-
     private static String TAG = "JEEPERS : MainActivity";
+    private ResidentRepository mResidentRepository;
+    private ResidentEntity mResidentEntity;
 
     private FragmentManager mManager;
 
@@ -88,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = findViewById(R.id.toolbar_general_layout);
         setSupportActionBar(mToolbar);
 
+        Database database = MDMContext.Instance(MainActivity.this);
+        mResidentRepository = new ResidentRepository(database);
+
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
         mActionBarDrawerToggle.syncState();
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startServices();
 
         mManager = getSupportFragmentManager();
-//
+
         ResidentFragment residentFragment = new ResidentFragment();
         FragmentTransaction transaction = mManager.beginTransaction();
         transaction.add(R.id.linear_fragment_container, residentFragment, "resident");
@@ -128,13 +134,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.item_residents:
                 ResidentFragment residentFragment = new ResidentFragment();
-                fragmentTransaction.replace(
-
-                        R.id.linear_fragment_container, residentFragment, "resident");
+                fragmentTransaction.add(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
                 break;
             case R.id.item_settings:
                 SettingsFragment settingsFragment = new SettingsFragment();
-                fragmentTransaction.replace(R.id.linear_fragment_container, settingsFragment, "resident");
+                fragmentTransaction.add(R.id.linear_fragment_container, settingsFragment, getString(R.string.tag_settings_fragment));
                 break;
         }
         fragmentTransaction.commit();
@@ -144,14 +148,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mActionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
+    public FragmentManager getManager() {
+        return this.mManager;
+    }
 
+    public ResidentRepository getResidentRepository() {
+        return this.mResidentRepository;
+    }
 
+    public void setResidentEntity(ResidentEntity residentEntity) {
+        this.mResidentEntity = residentEntity;
+    }
+
+    public ResidentEntity getResidentEntity() {
+        return this.mResidentEntity;
+    }
 
     private void startServices(){
         try {
@@ -168,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(getApplicationContext(), "DB : Get Database went wrong.", Toast.LENGTH_LONG);
             Log.d(TAG, "Can not create initialize CB Lite");
         }  catch (IOException e){
-            Toast.makeText(getApplicationContext(), "DB : Initializetion went wrong.", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "DB : Initialization went wrong.", Toast.LENGTH_LONG);
             Log.d(TAG, "Can not create initialize CB Lite");
         }
         Log.d(TAG, "DONE!");
