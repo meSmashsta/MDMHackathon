@@ -16,11 +16,19 @@
         <item name="android:textColorSecondary">@color/colorAimBlue</item>
     </style>
 
+    <!-- floatingButton theme. -->
+    <style name="floatingButtonComponent" parent="AppTheme">
+        <item name="colorAccent">@color/colorAimGreen</item>
+        <item name="android:textColorSecondary">@color/colorAimBlue</item>
+    </style>
+
     <!-- radiobutton theme. -->
     <style name="radioButtonComponent" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/colorAimGreen</item>
         <item name="android:textColorSecondary">@color/colorAimBlue</item>
     </style>
+
+
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>

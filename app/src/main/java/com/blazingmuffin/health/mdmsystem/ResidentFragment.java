@@ -67,14 +67,24 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
 
         mAddClicks = RxView.clicks(view.findViewById(R.id.btn_resident_add))
                 .subscribe(x -> {
-                            ResidentRepository residentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
-                            ResidentEntity residentEntity = new ResidentEntity();
-                            residentEntity.setFirstName("Mycar");
-                            residentEntity.setMiddleName("Pena");
-                            residentEntity.setLastName("Chu");
-                            residentEntity.setBirthdate("12/05/1994");
-                            residentEntity.setGender("Male");
-                            residentRepository.create(residentEntity);
+                            ResidentFragment residentFragment = new ResidentFragment();
+                            FragmentTransaction transaction = mManager.beginTransaction();
+                            transaction.replace(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
+                            transaction.addToBackStack(getString(R.string.tag_resident_details_fragment_backstack));
+                            transaction.commit();
+
+                            ResidentCreateFragment residentCreateFragment = new ResidentCreateFragment();
+                            FragmentTransaction fragmentTransaction = mManager.beginTransaction();
+                            fragmentTransaction.add(R.id.linear_fragment_container, residentCreateFragment, getString(R.string.tag_resident_create_fragment));
+                            fragmentTransaction.commit();
+//                            ResidentRepository residentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
+//                            ResidentEntity residentEntity = new ResidentEntity();
+//                            residentEntity.setFirstName("Mycar");
+//                            residentEntity.setMiddleName("Pena");
+//                            residentEntity.setLastName("Chu");
+//                            residentEntity.setBirthdate("12/05/1994");
+//                            residentEntity.setGender("Male");
+//                            residentRepository.create(residentEntity);
                         }
                 );
         mManager = ((MainActivity) getActivity()).getManager();
@@ -121,7 +131,7 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
             db.addChangeListener(s::onNext);
         }).observeOn(AndroidSchedulers.mainThread())
         .subscribe(e ->{
-            Toast.makeText(getActivity(), "DB CHANGE", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "DB CHANGE", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -151,6 +161,12 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
     @Override
     public void onRecyclerViewClickListener(ResidentEntity residentEntity) {
         mMainActivity.setResidentEntity(residentEntity);
+
+        Fragment fragment = mManager.findFragmentByTag(getString(R.string.tag_resident_fragment));
+        FragmentTransaction transaction = mManager.beginTransaction();
+        transaction.replace(R.id.linear_fragment_container, fragment, getString(R.string.tag_resident_fragment));
+        transaction.addToBackStack(getString(R.string.tag_resident_details_fragment_backstack));
+        transaction.commit();
 
         ResidentDetailsFragment residentDetailsFragment = new ResidentDetailsFragment();
         FragmentTransaction fragmentTransaction = mManager.beginTransaction();

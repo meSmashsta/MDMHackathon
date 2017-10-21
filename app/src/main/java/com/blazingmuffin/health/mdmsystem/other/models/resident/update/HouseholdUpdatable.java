@@ -9,34 +9,33 @@ import com.couchbase.lite.UnsavedRevision;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * Created by lenovo on 10/21/2017.
+ * Created by lenovo on 10/22/2017.
  */
 
-public class BasicUpdatable implements IUpdatable {
-
+public class HouseholdUpdatable implements IUpdatable {
     private final Database mDatabase;
 
-    public BasicUpdatable(Database database) {
+    public HouseholdUpdatable(Database database) {
         mDatabase = database;
     }
 
     @Override
-    public void update(final ResidentEntity residentEntity) {
+    public void update(ResidentEntity residentEntity) {
         Document residentDocument = mDatabase.getDocument(residentEntity.getId());
         try {
             residentDocument.update(new Document.DocumentUpdater() {
                 @Override
                 public boolean update(UnsavedRevision newRevision) {
                     Map<String, Object> properties = new HashMap<>();
-                    properties.put(ResidentEntity.FULL_NAME, residentEntity.getFullName());
-//                    properties.put(ResidentEntity.FIRST_NAME, residentEntity.getFirstName());
-//                    properties.put(ResidentEntity.MIDDLE_NAME, residentEntity.getMiddleName());
-//                    properties.put(ResidentEntity.LAST_NAME, residentEntity.getLastName());
-                    properties.put(ResidentEntity.GENDER, residentEntity.getGender());
-                    properties.put(ResidentEntity.BIRTHDATE, residentEntity.getBirthdate());
-                    properties.put(ResidentEntity.TYPE, ResidentEntity.TYPE_VALUE);
+                    Map<String, Object> householdProperties = new HashMap<>();
+                    ResidentEntity.Household household = residentEntity.getHousehold();
+                    properties.put(ResidentEntity.Household.NO_OF_FAMILY_IN_HOUSEHOLD, household.getNoOfFamilyInHousehold());
+                    properties.put(ResidentEntity.Household.NO_OF_PEOPLE_IN_HOUSEHOLD, household.getNoOfPeopleInHousehold());
+                    properties.put(ResidentEntity.Household.IS_FAMILY_4PS_MEMBER, household.isFamily4PsMember());
+                    properties.put(ResidentEntity.HOUSEHOLD, householdProperties);
                     newRevision.setUserProperties(properties);
                     return true;
                 }

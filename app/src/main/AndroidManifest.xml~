@@ -12,10 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity android:name=".SplashActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/SplashTheme">
         <!-- <activity android:name=".MainActivity"> -->
+=======
+        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
+>>>>>>> 2004040377e505016a0687ede7264c1a929f26f3
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,6 +28,7 @@
         <activity android:name=".MainActivity"
                   android:screenOrientation="portrait"/>
         <activity android:name=".ExperimentActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

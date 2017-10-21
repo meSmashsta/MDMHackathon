@@ -2,11 +2,14 @@ package com.blazingmuffin.health.mdmsystem;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.TransitionRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
@@ -19,6 +22,10 @@ public class ResidentDetailsFragment extends Fragment {
     private ResidentEntity mResidentEntity;
     private MainActivity mMainActivity;
 
+    private FragmentManager mManager;
+
+    private LinearLayout mHousehold;
+
     private TextView mFullName,
                      mGender;
 
@@ -28,10 +35,22 @@ public class ResidentDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_resident_details_layout, container, false);
         mMainActivity = (MainActivity) getActivity();
         mResidentEntity = mMainActivity.getResidentEntity();
+        mManager = mMainActivity.getManager();
+
+        mHousehold = (LinearLayout) view.findViewById(R.id.linear_resident_details_household_info);
+
         mFullName = (TextView) view.findViewById(R.id.tv_resident_details_full_name);
         mGender = (TextView) view.findViewById(R.id.tv_resident_details_gender);
         mFullName.setText(mResidentEntity.getFullName());
         mGender.setText(mResidentEntity.getGender());
+
+        mHousehold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         return view;
     }
 }

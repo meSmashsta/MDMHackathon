@@ -34,9 +34,10 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
     @Override
     public ResidentEntity create(ResidentEntity residentEntity) {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(ResidentEntity.FIRST_NAME, residentEntity.getFirstName());
-        properties.put(ResidentEntity.MIDDLE_NAME, residentEntity.getMiddleName());
-        properties.put(ResidentEntity.LAST_NAME, residentEntity.getLastName());
+        properties.put(ResidentEntity.FULL_NAME, residentEntity.getFullName());
+//        properties.put(ResidentEntity.FIRST_NAME, residentEntity.getFirstName());
+//        properties.put(ResidentEntity.MIDDLE_NAME, residentEntity.getMiddleName());
+//        properties.put(ResidentEntity.LAST_NAME, residentEntity.getLastName());
         properties.put(ResidentEntity.GENDER, residentEntity.getGender());
         properties.put(ResidentEntity.BIRTHDATE, residentEntity.getBirthdate());
         properties.put(ResidentEntity.TYPE, ResidentEntity.TYPE_VALUE);

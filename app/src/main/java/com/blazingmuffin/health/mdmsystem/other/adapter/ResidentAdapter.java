@@ -41,8 +41,7 @@ public class ResidentAdapter extends RecyclerView.Adapter<ResidentAdapter.Reside
     public void onBindViewHolder(ResidentViewHolder holder, int position) {
         QueryRow row = mResidents.getRow(position);
         ResidentEntity residentEntity = new ResidentEntity(row.getDocument());
-        String display = String.format("%1$s %2$d", residentEntity.getFirstName(), position);
-        holder.mFullName.setText(display);
+        holder.mFullName.setText(residentEntity.getFullName());
 //        holder.mFullName.setText(residentEntity.getId().toString());
     }
 
