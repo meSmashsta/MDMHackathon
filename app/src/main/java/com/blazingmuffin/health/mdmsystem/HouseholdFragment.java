@@ -26,10 +26,10 @@ public class HouseholdFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_house_hold_layout, container, false);
-        mNoOfFamily = (EditText) view.findViewById(R.id.et_house_hold_no_of_family);
-        mNoOfPeople = (EditText) view.findViewById(R.id.et_house_hold_no_of_people);
+        mNoOfFamily = view.findViewById(R.id.et_house_hold_no_of_family);
+        mNoOfPeople = view.findViewById(R.id.et_house_hold_no_of_people);
 
-        mSave = (Button) view.findViewById(R.id.btn_house_hold_save);
+        mSave = view.findViewById(R.id.btn_house_hold_save);
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

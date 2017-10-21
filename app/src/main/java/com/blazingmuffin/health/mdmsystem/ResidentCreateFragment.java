@@ -44,12 +44,12 @@ public class ResidentCreateFragment extends Fragment {
         mManager = mMainActivity.getManager();
         mResidentRepository = mMainActivity.getResidentRepository();
 
-        mGender = (RadioGroup) view.findViewById(R.id.rg_resident_create_gender);
+        mGender = view.findViewById(R.id.rg_resident_create_gender);
 
-        mFirstName = (EditText) view.findViewById(R.id.et_resident_create_full_name);
-        mBirthdate = (EditText) view.findViewById(R.id.et_resident_create_birthdate);
+        mFirstName = view.findViewById(R.id.et_resident_create_full_name);
+        mBirthdate = view.findViewById(R.id.et_resident_create_birthdate);
 
-        mCreate = (Button) view.findViewById(R.id.btn_resident_create_create);
+        mCreate = view.findViewById(R.id.btn_resident_create_create);
         mCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

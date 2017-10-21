@@ -9,7 +9,6 @@ import com.couchbase.lite.UnsavedRevision;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by lenovo on 10/22/2017.

@@ -22,11 +22,7 @@ import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 import com.blazingmuffin.health.mdmsystem.other.repositories.ResidentRepository;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
-import com.couchbase.lite.DatabaseOptions;
-import com.couchbase.lite.Emitter;
 import com.couchbase.lite.Manager;
-import com.couchbase.lite.Mapper;
-import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.listener.LiteListener;
 import com.couchbase.lite.replicator.Replication;
 
@@ -38,7 +34,6 @@ import java.net.SocketException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Map;
 
 import de.mannodermaus.rxbonjour.BonjourBroadcastConfig;
 import de.mannodermaus.rxbonjour.BonjourEvent;
