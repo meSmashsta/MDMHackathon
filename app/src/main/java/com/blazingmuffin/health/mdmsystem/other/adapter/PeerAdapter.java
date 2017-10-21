@@ -2,11 +2,13 @@ package com.blazingmuffin.health.mdmsystem.other.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blazingmuffin.health.mdmsystem.R;
 import com.blazingmuffin.health.mdmsystem.other.models.Peer;
@@ -21,6 +23,17 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.PeerViewHolder
 
     private List<Peer> mPeers;
     private Context mContext;
+
+    // Define listener member variable
+    private OnItemClickListener listener;
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     // Pass in the contact array into the constructor
     public PeerAdapter(Context context, List<Peer> peers) {
@@ -63,31 +76,7 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.PeerViewHolder
         return mPeers.size();
     }
 
-    public void clear(){
-        mPeers.clear();
-    }
-
-    /*
-            @Override
-            public PeerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                Context context = parent.getContext();
-                LayoutInflater layoutInflater = LayoutInflater.from(context);
-                boolean shouldAttachToParent = false;
-                View view = layoutInflater.inflate(R.layout.item_peer_layout, parent, false);
-                return new PeerViewHolder(view);
-            }
-
-            @Override
-            public void onBindViewHolder(PeerViewHolder holder, int position) {
-
-            }
-
-            @Override
-            public int getItemCount() {
-                return 5;
-            }
-        */
-    public  class PeerViewHolder extends RecyclerView.ViewHolder {
+    public  class PeerViewHolder extends RecyclerView.ViewHolder{
         public TextView mPeerTextView;
         public Button mConnectButton;
 
@@ -96,6 +85,18 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.PeerViewHolder
 
             mPeerTextView = itemView.findViewById(R.id.peer_textview);
             mConnectButton = itemView.findViewById(R.id.connect_button);
+            mConnectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

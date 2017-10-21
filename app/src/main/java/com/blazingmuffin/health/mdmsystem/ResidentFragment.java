@@ -27,6 +27,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lenovo on 10/21/2017.
@@ -102,7 +103,7 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
 //                mResidentRepository.delete(residentEntity);
 //            }
 //        });
-
+        
         Database db = MDMContext.Instance(getContext());
         com.couchbase.lite.View cview = db.getView(ResidentEntity.VIEW);
         if (cview.getMap() == null) {
@@ -128,7 +129,8 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
         mQueryChanges = Observable.<LiveQuery.ChangeEvent>create(s -> {
             mQuery.addChangeListener(s::onNext);
             mQuery.start();
-        }).observeOn(AndroidSchedulers.mainThread())
+        }).subscribeOn(Schedulers.io())
+         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(e -> {
             Toast.makeText(getActivity(), "Updated..." + e.getRows().getCount(), Toast.LENGTH_LONG).show();
             mResidentAdapter.setResidents(e.getRows());
@@ -139,11 +141,11 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mAddClicks.dispose();
         mQueryChanges.dispose();
         mDatabaseChanges.dispose();
         mQuery.stop();
+        super.onDestroy();
     }
 
     @Override

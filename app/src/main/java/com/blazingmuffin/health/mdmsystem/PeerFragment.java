@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.blazingmuffin.health.mdmsystem.other.adapter.PeerAdapter;
 import com.blazingmuffin.health.mdmsystem.other.models.Peer;
@@ -26,7 +27,7 @@ import io.reactivex.disposables.Disposable;
  * Created by lenovo on 10/21/2017.
  */
 
-public class PeerFragment extends Fragment {
+public class PeerFragment extends Fragment{
     private static String TAG = "JEEPERS : Peer Activity";
 
     private RecyclerView mRecyclerView;
@@ -42,8 +43,19 @@ public class PeerFragment extends Fragment {
 
         // initialize dummy peers
         mPeerAdapter = new PeerAdapter(this.getContext(), peers);
-        mRecyclerView.setAdapter(mPeerAdapter);
+        mPeerAdapter.setOnItemClickListener(new PeerAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                Peer peer = peers.get(position);
+                Toast.makeText(getActivity(), peer.getName(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "------------ clicked --------------");
 
+                ((MainActivity) getActivity()).setSyncURLString(peer.getName());
+                ((MainActivity) getActivity()).startCBSyncing();
+
+            }
+        });
+        mRecyclerView.setAdapter(mPeerAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         return view;
@@ -56,10 +68,7 @@ public class PeerFragment extends Fragment {
         ((MainActivity) getActivity()).startDiscover()
                 .subscribe(new Observer<BonjourEvent>() {
                     @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
-                        Log.d(TAG,"DISCOVER : onSubscribe");
-                        //peers.clear();
-                    }
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {  Log.d(TAG,"DISCOVER : onSubscribe"); }
 
                     @Override
                     public void onNext(@io.reactivex.annotations.NonNull final BonjourEvent bonjourEvent) {
@@ -109,7 +118,7 @@ public class PeerFragment extends Fragment {
                 });
 
         super.onStart();
-    }
+    }//--onStart
 
     @Override
     public void onStop() {

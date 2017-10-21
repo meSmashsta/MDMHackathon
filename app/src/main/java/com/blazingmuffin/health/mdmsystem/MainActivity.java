@@ -74,12 +74,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String designDocName = "resident-view";
     public static final String byDateViewName = "byDate";
     private Boolean mIsCBSyncRunning = false;
+    private Replication mPullReplication;
+    private Replication mPushReplication;
 
     // service discovery and registration
     protected RxBonjour mRxBonjour;
 
     public RxBonjour getRxBonjour() {
         return mRxBonjour;
+    }
+
+    public void setSyncURLString(String syncURLString) {
+        mSyncURLString = syncURLString;
     }
 
     @Override
@@ -110,22 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction transaction = mManager.beginTransaction();
         transaction.add(R.id.linear_fragment_container, residentFragment, "resident");
         transaction.commit();
-
-
-//        SettingsFragment settingsFragment = new SettingsFragment();
-//        FragmentTransaction transaction = mManager.beginTransaction();
-//        transaction.add(R.id.linear_fragment_container, settingsFragment, "resident");
-//        transaction.commit();
-
-        //PeerFragment peerFragment = new PeerFragment();
-        //FragmentTransaction transaction = mManager.beginTransaction();
-        //transaction.add(R.id.linear_fragment_container, peerFragment, "resident");
-        //transaction.commit();
-
-        //SettingsFragment settingsFragment = new SettingsFragment();
-        //FragmentTransaction transaction = mManager.beginTransaction();
-        //transaction.add(R.id.linear_fragment_container, settingsFragment, "resident");
-        //transaction.commit();
     }
 
     @Override
@@ -134,11 +124,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.item_residents:
                 ResidentFragment residentFragment = new ResidentFragment();
-                fragmentTransaction.add(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
+                fragmentTransaction.replace(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
+                break;
+            case R.id.item_peers:
+                PeerFragment peerFragment = new PeerFragment();
+                fragmentTransaction.replace(R.id.linear_fragment_container, peerFragment, "peer");
+
                 break;
             case R.id.item_settings:
                 SettingsFragment settingsFragment = new SettingsFragment();
-                fragmentTransaction.add(R.id.linear_fragment_container, settingsFragment, getString(R.string.tag_settings_fragment));
+                fragmentTransaction.replace(R.id.linear_fragment_container, settingsFragment, getString(R.string.tag_settings_fragment));
                 break;
         }
         fragmentTransaction.commit();
@@ -190,6 +185,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void startCouchbaseLite() throws IOException, CouchbaseLiteException {
+        mCBManager = MDMContext.Manager(this);
+        mDatabase = MDMContext.Instance(this);
+
+        /*
         Manager.enableLogging(TAG, Log.VERBOSE);
         mCBManager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
         DatabaseOptions dbOptions = new DatabaseOptions();
@@ -207,12 +206,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }, "1.0");
+        */
     }
 
-    private void startCBSyncing(){
+    protected void startCBSyncing(){
         URL syncURL;
+        stopRunningSync();
         if(!mSyncURLString.isEmpty()) {
-            mIsCBSyncRunning = false;
             try {
                 syncURL = new URL(mSyncURLString);
                 initPULLReplication(syncURL);
@@ -231,10 +231,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initPULLReplication(URL syncURL){
-        Replication pullReplication = mDatabase.createPullReplication(syncURL);
-        pullReplication.setContinuous(true);
-        pullReplication.start();
-        pullReplication.addChangeListener(new Replication.ChangeListener() {
+        mPullReplication = mDatabase.createPullReplication(syncURL);
+        mPullReplication.setContinuous(true);
+        mPullReplication.start();
+        mPullReplication.addChangeListener(new Replication.ChangeListener() {
             @Override
             public void changed(Replication.ChangeEvent event) {
                 // TODO: 10/21/17 PUT PULL Replication Event handler here
@@ -244,10 +244,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initPUSHReplication(URL syncURL){
-        Replication pushReplication = mDatabase.createPushReplication(syncURL);
-        pushReplication.setContinuous(true);
-        pushReplication.start();
-        pushReplication.addChangeListener(new Replication.ChangeListener() {
+        mPushReplication = mDatabase.createPushReplication(syncURL);
+        mPushReplication.setContinuous(true);
+        mPushReplication.start();
+        mPushReplication.addChangeListener(new Replication.ChangeListener() {
             @Override
             public void changed(Replication.ChangeEvent event) {
                 // TODO: 10/21/17 PUT PUSH Replication Event handler here
@@ -339,4 +339,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //.filter(e -> e.getService().getName().startsWith(getString(R.string.general_database_name)))
                 //.subscribeOn(Schedulers.io());
     }//--startDiscover
+
+    protected void stopRunningSync(){
+        if(mIsCBSyncRunning){
+            mPullReplication.stop();
+            mPushReplication.stop();
+            mIsCBSyncRunning = false;
+        }
+    }
 }

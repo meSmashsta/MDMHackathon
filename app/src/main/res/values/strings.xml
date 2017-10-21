@@ -15,5 +15,6 @@
     <string name="drawer_close">close</string>
     <string name="peer_message_connect_button">Connect</string>
     <string name="sidebar_records">Records</string>
+    <string name="sidebar_peers">Peers</string>
     <string name="sidebar_settings">Settings</string>
 </resources>
