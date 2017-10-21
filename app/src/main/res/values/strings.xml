@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MDMS ystem</string>
     <string name="general_database_name">mdm</string>
+
+
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
 </resources>
