@@ -40,16 +40,16 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
         mManager = getSupportFragmentManager();
 //
-//        ResidentFragment residentFragment = new ResidentFragment();
-//        FragmentTransaction transaction = mManager.beginTransaction();
-//        transaction.add(R.id.linear_fragment_container, residentFragment, "resident");
-//        transaction.commit();
-
-
-        SettingsFragment settingsFragment = new SettingsFragment();
+        ResidentFragment residentFragment = new ResidentFragment();
         FragmentTransaction transaction = mManager.beginTransaction();
-        transaction.add(R.id.linear_fragment_container, settingsFragment, "resident");
+        transaction.add(R.id.linear_fragment_container, residentFragment, "resident");
         transaction.commit();
+
+
+//        SettingsFragment settingsFragment = new SettingsFragment();
+//        FragmentTransaction transaction = mManager.beginTransaction();
+//        transaction.add(R.id.linear_fragment_container, settingsFragment, "resident");
+//        transaction.commit();
 
     }
 

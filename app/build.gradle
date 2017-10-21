@@ -39,6 +39,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.0.2'
     compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.android.support:recyclerview-v7:26.0.2'
     compile 'com.couchbase.lite:couchbase-lite-android:1.4.0'
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.0'
