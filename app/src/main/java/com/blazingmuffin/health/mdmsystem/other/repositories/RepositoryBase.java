@@ -3,7 +3,6 @@ package com.blazingmuffin.health.mdmsystem.other.repositories;
 import com.blazingmuffin.health.mdmsystem.other.models.EntityBase;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.LiveQuery;
-import com.couchbase.lite.QueryEnumerator;
 
 /**
  * Created by lenovo on 10/21/2017.

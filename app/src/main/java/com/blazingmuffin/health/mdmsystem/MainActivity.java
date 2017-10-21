@@ -1,15 +1,14 @@
 package com.blazingmuffin.health.mdmsystem;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -28,7 +27,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_general_layout);
+        mToolbar = findViewById(R.id.toolbar_general_layout);
         setSupportActionBar(mToolbar);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -36,7 +35,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mNavigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationDrawer = findViewById(R.id.navigation_view);
         mNavigationDrawer.setNavigationItemSelectedListener(this);
 
         mManager = getSupportFragmentManager();
@@ -74,9 +73,6 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mActionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }

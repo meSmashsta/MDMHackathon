@@ -1,7 +1,6 @@
 package com.blazingmuffin.health.mdmsystem.other.repositories;
 
 import com.blazingmuffin.health.mdmsystem.other.interfaces.IUpdatable;
-import com.blazingmuffin.health.mdmsystem.other.models.MDMContext;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
@@ -9,7 +8,6 @@ import com.couchbase.lite.Document;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Mapper;
-import com.couchbase.lite.QueryEnumerator;
 
 import java.util.HashMap;
 import java.util.Map;
