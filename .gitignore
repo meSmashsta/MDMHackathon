@@ -7,3 +7,10 @@
 /build
 /captures
 .externalNativeBuild
+
+#Emacs
+*.*~
+*.*#
+
+#VIM
+*.swp
