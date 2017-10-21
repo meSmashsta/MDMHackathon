@@ -1,5 +1,7 @@
 package com.blazingmuffin.health.mdmsystem.other.models;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 
 public class Peer {
     private String mName;
-
+    private URL mURL;
     public Peer(String name) {
         mName = name;
     }
@@ -24,5 +26,10 @@ public class Peer {
             peers.add(new Peer("http://blablabla/" + i));
         }
         return peers;
+    }
+
+    public URL getURL() throws MalformedURLException {
+        mURL = new URL(mName);
+        return mURL;
     }
 }

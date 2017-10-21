@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.blazingmuffin.health.mdmsystem.other.models.MDMContext;
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private Toolbar mToolbar;
     private NavigationView mNavigationDrawer;
+    private FloatingActionButton mFloatingAddButton;
+
 
     private String mSyncURLString = "";
     private String mRESTURLString;
@@ -102,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mNavigationDrawer = findViewById(R.id.navigation_views);
         mNavigationDrawer.setNavigationItemSelectedListener(this);
+        mFloatingAddButton = (FloatingActionButton) findViewById(R.id.fab);
 
         startServices();
 
@@ -118,15 +123,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction fragmentTransaction = mManager.beginTransaction();
         switch (item.getItemId()) {
             case R.id.item_residents:
+                mFloatingAddButton.setVisibility(View.VISIBLE);
                 ResidentFragment residentFragment = new ResidentFragment();
                 fragmentTransaction.replace(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
                 break;
             case R.id.item_peers:
+                mFloatingAddButton.setVisibility(View.INVISIBLE);
                 PeerFragment peerFragment = new PeerFragment();
                 fragmentTransaction.replace(R.id.linear_fragment_container, peerFragment, "peer");
 
                 break;
             case R.id.item_settings:
+                mFloatingAddButton.setVisibility(View.INVISIBLE);
                 SettingsFragment settingsFragment = new SettingsFragment();
                 fragmentTransaction.replace(R.id.linear_fragment_container, settingsFragment, getString(R.string.tag_settings_fragment));
                 break;

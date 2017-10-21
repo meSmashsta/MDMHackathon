@@ -15,10 +15,13 @@
         android:id="@+id/connect_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_gravity="right"
+        android:background="@color/colorAccent"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:layout_alignParentRight="true"
         android:text="@string/peer_message_connect_button"
+        android:textColor="@color/colorAimGreen"
+        android:textColorLink="@color/colorAimYellow"
         android:textSize="10sp"/>
 </RelativeLayout>

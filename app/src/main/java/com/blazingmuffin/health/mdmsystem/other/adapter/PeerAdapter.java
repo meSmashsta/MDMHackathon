@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.blazingmuffin.health.mdmsystem.R;
 import com.blazingmuffin.health.mdmsystem.other.models.Peer;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -62,11 +63,15 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.PeerViewHolder
     @Override
     public void onBindViewHolder(PeerViewHolder holder, int position) {
         Peer peer = mPeers.get(position);
-
-        TextView textView = holder.mPeerTextView;
-        textView.setText(peer.getName());
-        Button button = holder.mConnectButton;
-        button.setEnabled(true);
+        try {
+            String urlString = peer.getURL().getHost().toString();
+            TextView textView = holder.mPeerTextView;
+            textView.setText(urlString);
+            Button button = holder.mConnectButton;
+            button.setEnabled(true);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
