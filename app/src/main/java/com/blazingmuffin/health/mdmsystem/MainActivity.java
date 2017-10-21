@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mNavigationDrawer = findViewById(R.id.navigation_views);
         mNavigationDrawer.setNavigationItemSelectedListener(this);
-        mFloatingAddButton = (FloatingActionButton) findViewById(R.id.fab);
+        mFloatingAddButton = findViewById(R.id.fab);
 
         startServices();
 
@@ -160,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setResidentEntity(ResidentEntity residentEntity) {
         this.mResidentEntity = residentEntity;
     }
+
+    public Database getDatabase() { return this.mDatabase; }
 
     public ResidentEntity getResidentEntity() {
         return this.mResidentEntity;

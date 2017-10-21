@@ -18,8 +18,8 @@
 
     <!-- floatingButton theme. -->
     <style name="floatingButtonComponent" parent="AppTheme">
-        <item name="colorAccent">@color/colorAimGreen</item>
-        <item name="android:textColorSecondary">@color/colorAimBlue</item>
+        <!--<item name="colorAccent">@color/colorAimGreen</item>-->
+        <!--<item name="android:textColorSecondary">@color/colorAimBlue</item>-->
     </style>
 
     <!-- radiobutton theme. -->

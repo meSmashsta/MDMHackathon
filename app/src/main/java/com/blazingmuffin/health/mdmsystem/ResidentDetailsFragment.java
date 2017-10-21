@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,10 @@ public class ResidentDetailsFragment extends Fragment {
         mHousehold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                HouseholdFragment householdFragment = new HouseholdFragment();
+                FragmentTransaction transaction = mManager.beginTransaction();
+                transaction.add(R.id.linear_fragment_container, householdFragment, getString(R.string.tag_resident_household_save));
+                transaction.commit();
             }
         });
 

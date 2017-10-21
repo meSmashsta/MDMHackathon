@@ -6,6 +6,7 @@
 
     <string name="tag_resident_details_fragment">resident-details</string>
     <string name="tag_resident_create_fragment">resident-create</string>
+    <string name="tag_resident_household_save">household-save</string>
     <string name="tag_resident_details_fragment_backstack">resident-details-backstack</string>
     <string name="tag_resident_fragment">resident</string>
     <string name="tag_settings_fragment">settings</string>

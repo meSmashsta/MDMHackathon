@@ -142,7 +142,8 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
         }).subscribeOn(Schedulers.io())
          .observeOn(AndroidSchedulers.mainThread())
         .subscribe(e -> {
-            Toast.makeText(getActivity(), "Updated..." + e.getRows().getCount(), Toast.LENGTH_LONG).show();
+            if (e.getRows() != null)
+                Toast.makeText(getActivity(), "Updated..." + e.getRows().getCount(), Toast.LENGTH_LONG).show();
             mResidentAdapter.setResidents(e.getRows());
         });
 

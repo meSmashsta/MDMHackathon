@@ -26,9 +26,9 @@ public class ResidentCreateFragment extends Fragment {
 
     private FragmentManager mManager;
 
-    private EditText mFirstName,
-                     mMiddleName,
-                     mLastName,
+    private EditText mFullName,
+//                     mMiddleName,
+//                     mLastName,
                      mBirthdate;
 
     private RadioGroup mGender;
@@ -46,7 +46,7 @@ public class ResidentCreateFragment extends Fragment {
 
         mGender = view.findViewById(R.id.rg_resident_create_gender);
 
-        mFirstName = view.findViewById(R.id.et_resident_create_full_name);
+        mFullName = view.findViewById(R.id.et_resident_create_full_name);
         mBirthdate = view.findViewById(R.id.et_resident_create_birthdate);
 
         mCreate = view.findViewById(R.id.btn_resident_create_create);
@@ -54,9 +54,9 @@ public class ResidentCreateFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ResidentEntity residentEntity = new ResidentEntity();
-                residentEntity.setFirstName(WidgetUtils.getText(mFirstName));
-                residentEntity.setMiddleName(WidgetUtils.getText(mMiddleName));
-                residentEntity.setLastName(WidgetUtils.getText(mLastName));
+                residentEntity.setFullName(WidgetUtils.getText(mFullName));
+//                residentEntity.setMiddleName(WidgetUtils.getText(mMiddleName));
+//                residentEntity.setLastName(WidgetUtils.getText(mLastName));
                 residentEntity.setBirthdate(WidgetUtils.getText(mBirthdate));
                 residentEntity.setGender(WidgetUtils.getText(mGender));
                 mResidentRepository.create(residentEntity);
