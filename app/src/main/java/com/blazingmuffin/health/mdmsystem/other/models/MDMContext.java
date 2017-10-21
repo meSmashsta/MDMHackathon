@@ -15,7 +15,9 @@ import java.io.IOException;
  */
 
 public class MDMContext {
-    public static synchronized Manager Manager(Context context) {
+    private static Database database;
+
+    private static synchronized Manager Manager(Context context) {
         Manager manager = null;
         try {
             manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
@@ -24,10 +26,11 @@ public class MDMContext {
         }
         return manager;
     }
+
     public static synchronized Database Instance(Context context) {
-        Database database = null;
         try {
-            database = MDMContext.Manager(context).getDatabase(context.getString(R.string.general_database_name));
+            if (database == null)
+                database = MDMContext.Manager(context).getDatabase(context.getString(R.string.general_database_name));
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }

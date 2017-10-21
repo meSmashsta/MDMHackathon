@@ -8,85 +8,65 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.blazingmuffin.health.mdmsystem.other.adapter.ResidentAdapter;
 import com.blazingmuffin.health.mdmsystem.other.models.MDMContext;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 import com.blazingmuffin.health.mdmsystem.other.repositories.ResidentRepository;
+import com.couchbase.lite.Database;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Mapper;
 
 import java.util.Map;
 
+import com.couchbase.lite.Query;
+import com.jakewharton.rxbinding2.view.RxView;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by lenovo on 10/21/2017.
  */
 
-public class ResidentFragment extends Fragment {
-    private RecyclerView mRecyclerView;
+public class ResidentFragment extends Fragment{
     private ResidentAdapter mResidentAdapter;
 
-    private ResidentRepository mResidentRepository;
-
-    private Button mAdd;
-
-//    private Button  mAdd,
-//                    mEdit,
-//                    mDelete;
+    private Disposable mAddClicks;
+    private Disposable mQueryChanges;
+    private Disposable mDatabaseChanges;
+    private LiveQuery mQuery ;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resident_layout, container, false);
-        mRecyclerView = view.findViewById(R.id.rv_resident_fragment);
+        RecyclerView mRecyclerView = view.findViewById(R.id.rv_resident_fragment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mResidentAdapter = new ResidentAdapter();
         mRecyclerView.setAdapter(mResidentAdapter);
 
-        mAdd = view.findViewById(R.id.btn_resident_add);
-//        mEdit = (Button) view.findViewById(R.id.btn_resident_edit);
-//        mDelete = (Button) view.findViewById(R.id.btn_resident_delete);
+        mAddClicks = RxView.clicks(view.findViewById(R.id.btn_resident_add))
+                .subscribe(x -> {
+                            ResidentRepository residentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
+                            ResidentEntity residentEntity = new ResidentEntity();
+                            residentEntity.setFirstName("Mycar");
+                            residentEntity.setMiddleName("Pena");
+                            residentEntity.setLastName("Chu");
+                            residentEntity.setBirthdate("12/05/1994");
+                            residentEntity.setGender("Male");
+                            residentRepository.create(residentEntity);
+                        }
+                );
 
-        mResidentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
-
-        mAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ResidentEntity residentEntity = new ResidentEntity();
-                residentEntity.setFirstName("Mycar");
-                residentEntity.setMiddleName("Pena");
-                residentEntity.setLastName("Chu");
-                residentEntity.setBirthdate("12/05/1994");
-                residentEntity.setGender("Male");
-                mResidentRepository.create(residentEntity);
-            }
-        });
-//
-//        mEdit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ResidentEntity residentEntity = mResidentRepository.get("45e693d0-833e-45c4-85e6-1734e36a8312");
-//                residentEntity.setFirstName("Arvin");
-//                BasicUpdatable basicUpdatable = new BasicUpdatable(MDMContext.Instance(getActivity()));
-//                mResidentRepository.setIUpdatable(basicUpdatable);
-//                mResidentRepository.update(residentEntity);
-//            }
-//        });
-//
-//        mDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ResidentEntity residentEntity = mResidentRepository.get("45e693d0-833e-45c4-85e6-1734e36a8312");
-//                mResidentRepository.delete(residentEntity);
-//            }
-//        });
-
-        com.couchbase.lite.View cview = MDMContext.Instance(getContext()).getView(ResidentEntity.VIEW);
+        Database db = MDMContext.Instance(getContext());
+        com.couchbase.lite.View cview = db.getView(ResidentEntity.VIEW);
         if (cview.getMap() == null) {
             cview.setMap(new Mapper() {
                 @Override
@@ -97,23 +77,32 @@ public class ResidentFragment extends Fragment {
                 }
             }, ResidentEntity.VIEW_VERSION);
         }
-        LiveQuery liveQuery = cview.createQuery().toLiveQuery();
-        liveQuery.addChangeListener(new LiveQuery.ChangeListener() {
-            @Override
-            public void changed(final LiveQuery.ChangeEvent event) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mResidentAdapter.setResidents(event.getRows());
 
-                        Toast.makeText(getActivity(), "Updated...", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+        mDatabaseChanges = Observable.<Database.ChangeEvent>create(s -> {
+            db.addChangeListener(s::onNext);
+        }).observeOn(AndroidSchedulers.mainThread())
+        .subscribe(e ->{
+            Toast.makeText(getActivity(), "DB CHANGE", Toast.LENGTH_SHORT).show();
         });
-        liveQuery.start();
 
+        mQuery = cview.createQuery().toLiveQuery();
+        mQueryChanges = Observable.<LiveQuery.ChangeEvent>create(s -> {
+            mQuery.addChangeListener(s::onNext);
+            mQuery.start();
+        }).observeOn(AndroidSchedulers.mainThread())
+        .subscribe(e -> {
+            Toast.makeText(getActivity(), "Updated..." + e.getRows().getCount(), Toast.LENGTH_LONG).show();
+        });
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAddClicks.dispose();
+        mQueryChanges.dispose();
+        mDatabaseChanges.dispose();
+        mQuery.stop();
     }
 }
