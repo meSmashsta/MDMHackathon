@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
@@ -32,6 +33,8 @@ public class ResidentCreateFragment extends Fragment {
                      mBirthdate;
 
     private RadioGroup mGender;
+    private RadioButton mMale,
+                        mFemale;
 
     private Button mCreate;
 
@@ -44,15 +47,20 @@ public class ResidentCreateFragment extends Fragment {
         mManager = mMainActivity.getManager();
         mResidentRepository = mMainActivity.getResidentRepository();
 
-        mGender = view.findViewById(R.id.rg_resident_create_gender);
+        mGender = (RadioGroup) view.findViewById(R.id.rg_resident_create_gender);
+        mMale = (RadioButton) view.findViewById(R.id.rb_resident_create_male);
+        mFemale = (RadioButton) view.findViewById(R.id.rb_resident_create_female);
 
-        mFullName = view.findViewById(R.id.et_resident_create_full_name);
-        mBirthdate = view.findViewById(R.id.et_resident_create_birthdate);
+        mFullName = (EditText) view.findViewById(R.id.et_resident_create_full_name);
+        mBirthdate = (EditText) view.findViewById(R.id.et_resident_create_birthdate);
 
-        mCreate = view.findViewById(R.id.btn_resident_create_create);
+        mCreate = (Button) view.findViewById(R.id.btn_resident_create_create);
         mCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isValid()) {
+                    return;
+                }
                 ResidentEntity residentEntity = new ResidentEntity();
                 residentEntity.setFullName(WidgetUtils.getText(mFullName));
 //                residentEntity.setMiddleName(WidgetUtils.getText(mMiddleName));
@@ -70,5 +78,25 @@ public class ResidentCreateFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private boolean isValid() {
+        boolean isValid = true;
+        if (mFullName.getText().toString().trim().equals("")) {
+            mFullName.setError(getString(R.string.message_error_required));
+            isValid = false;
+        }
+
+        if (mBirthdate.getText().toString().trim().equals("")) {
+            mBirthdate.setError(getString(R.string.message_error_required));
+            isValid = false;
+        }
+
+        if (mGender.getCheckedRadioButtonId() == -1) {
+            mMale.setError(getString(R.string.message_error_select));
+            isValid = false;
+        }
+
+        return isValid;
     }
 }

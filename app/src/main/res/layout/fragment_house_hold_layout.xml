@@ -19,7 +19,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAimDarkPurple"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:hint="No. of families in the household" />
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAimDarkPurple"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:hint="No. of people in the household" />
                 <TextView
                     android:text="Gender"
@@ -44,12 +44,12 @@
                     android:padding="16dp">
                     <RadioButton
                         android:id="@+id/rb_house_hold_is_4ps"
-                        android:text="Male"
+                        android:text="Yes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <RadioButton
                         android:id="@+id/rb_house_hold_not_4ps"
-                        android:text="Female"
+                        android:text="No"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </RadioGroup>

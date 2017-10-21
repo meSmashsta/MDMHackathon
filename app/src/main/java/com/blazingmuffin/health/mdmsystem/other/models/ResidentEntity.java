@@ -2,6 +2,9 @@ package com.blazingmuffin.health.mdmsystem.other.models;
 
 import com.couchbase.lite.Document;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by lenovo on 10/21/2017.
  */
@@ -48,11 +51,19 @@ public class ResidentEntity extends EntityBase {
         Object householdProperties = residentDocument.getProperty(HOUSEHOLD);
         if (householdProperties != null) {
             Household household = getHousehold();
-            household.setNoOfFamilyInHousehold(Integer.parseInt(residentDocument.getProperty(Household.NO_OF_FAMILY_IN_HOUSEHOLD).toString()));
-            household.setNoOfPeopleInHousehold(Integer.parseInt(residentDocument.getProperty(Household.NO_OF_PEOPLE_IN_HOUSEHOLD).toString()));
-            household.setFamily4PsMember(Boolean.valueOf(residentDocument.getProperty(Household.IS_FAMILY_4PS_MEMBER).toString()));
+            Map<String, Object> householdProperty = ((Map) residentDocument.getProperty(HOUSEHOLD));
+            String noOfFamilyInHousehold = householdProperty.get(Household.NO_OF_FAMILY_IN_HOUSEHOLD).toString();
+            String noOfPeopleInHousehold = householdProperty.get(Household.NO_OF_PEOPLE_IN_HOUSEHOLD).toString();
+            boolean is4PsMemeber = Boolean.valueOf(householdProperty.get(Household.IS_FAMILY_4PS_MEMBER).toString());
+            household.setNoOfFamilyInHousehold(Integer.parseInt(noOfFamilyInHousehold));
+            household.setNoOfPeopleInHousehold(Integer.parseInt(noOfPeopleInHousehold));
+            household.setFamily4PsMember(is4PsMemeber);
         }
         setId(residentDocument.getId());
+    }
+
+    public Object getProperty(Document document, String key) {
+        return document.getProperty(key);
     }
 
     public String getFirstName() {

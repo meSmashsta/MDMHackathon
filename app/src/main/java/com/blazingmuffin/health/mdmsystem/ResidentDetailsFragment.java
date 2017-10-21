@@ -2,12 +2,14 @@ package com.blazingmuffin.health.mdmsystem;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.TransitionRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,10 +38,10 @@ public class ResidentDetailsFragment extends Fragment {
         mResidentEntity = mMainActivity.getResidentEntity();
         mManager = mMainActivity.getManager();
 
-        mHousehold = view.findViewById(R.id.linear_resident_details_household_info);
+        mHousehold = (LinearLayout) view.findViewById(R.id.linear_resident_details_household_info);
 
-        mFullName = view.findViewById(R.id.tv_resident_details_full_name);
-        mGender = view.findViewById(R.id.tv_resident_details_gender);
+        mFullName = (TextView) view.findViewById(R.id.tv_resident_details_full_name);
+        mGender = (TextView) view.findViewById(R.id.tv_resident_details_gender);
         mFullName.setText(mResidentEntity.getFullName());
         mGender.setText(mResidentEntity.getGender());
 
@@ -49,6 +51,7 @@ public class ResidentDetailsFragment extends Fragment {
                 HouseholdFragment householdFragment = new HouseholdFragment();
                 FragmentTransaction transaction = mManager.beginTransaction();
                 transaction.add(R.id.linear_fragment_container, householdFragment, getString(R.string.tag_resident_household_save));
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
