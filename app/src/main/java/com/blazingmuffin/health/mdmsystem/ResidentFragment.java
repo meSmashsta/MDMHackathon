@@ -25,11 +25,17 @@ import java.util.Map;
  * Created by lenovo on 10/21/2017.
  */
 
-public class ResidentFragment extends Fragment{
+public class ResidentFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ResidentAdapter mResidentAdapter;
 
+    private ResidentRepository mResidentRepository;
+
     private Button mAdd;
+
+//    private Button  mAdd,
+//                    mEdit,
+//                    mDelete;
 
     @Nullable
     @Override
@@ -43,19 +49,42 @@ public class ResidentFragment extends Fragment{
         mRecyclerView.setAdapter(mResidentAdapter);
 
         mAdd = view.findViewById(R.id.btn_resident_add);
+//        mEdit = (Button) view.findViewById(R.id.btn_resident_edit);
+//        mDelete = (Button) view.findViewById(R.id.btn_resident_delete);
+
+        mResidentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
+
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResidentRepository residentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
                 ResidentEntity residentEntity = new ResidentEntity();
                 residentEntity.setFirstName("Mycar");
                 residentEntity.setMiddleName("Pena");
                 residentEntity.setLastName("Chu");
                 residentEntity.setBirthdate("12/05/1994");
                 residentEntity.setGender("Male");
-                residentRepository.create(residentEntity);
+                mResidentRepository.create(residentEntity);
             }
         });
+//
+//        mEdit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ResidentEntity residentEntity = mResidentRepository.get("45e693d0-833e-45c4-85e6-1734e36a8312");
+//                residentEntity.setFirstName("Arvin");
+//                BasicUpdatable basicUpdatable = new BasicUpdatable(MDMContext.Instance(getActivity()));
+//                mResidentRepository.setIUpdatable(basicUpdatable);
+//                mResidentRepository.update(residentEntity);
+//            }
+//        });
+//
+//        mDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ResidentEntity residentEntity = mResidentRepository.get("45e693d0-833e-45c4-85e6-1734e36a8312");
+//                mResidentRepository.delete(residentEntity);
+//            }
+//        });
 
         com.couchbase.lite.View cview = MDMContext.Instance(getContext()).getView(ResidentEntity.VIEW);
         if (cview.getMap() == null) {
@@ -76,6 +105,7 @@ public class ResidentFragment extends Fragment{
                     @Override
                     public void run() {
                         mResidentAdapter.setResidents(event.getRows());
+
                         Toast.makeText(getActivity(), "Updated...", Toast.LENGTH_LONG).show();
                     }
                 });

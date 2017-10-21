@@ -3,11 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
-    <Button
-        android:id="@+id/btn_resident_add"
-        android:text="Add Resident"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_resident_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add" />
+        <!--<Button-->
+            <!--android:id="@+id/btn_resident_edit"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Edit" />-->
+        <!--<Button-->
+            <!--android:id="@+id/btn_resident_delete"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Delete" />-->
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_resident_fragment"
         android:layout_width="match_parent"

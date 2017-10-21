@@ -5,6 +5,7 @@ package com.blazingmuffin.health.mdmsystem.other.models;
  */
 
 public abstract class EntityBase {
+    public static final String DELETED_AT = "deleted_at";
     private String mId;
 
     public void setId(String id) {

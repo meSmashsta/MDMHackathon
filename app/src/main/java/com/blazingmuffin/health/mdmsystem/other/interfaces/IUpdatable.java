@@ -7,6 +7,6 @@ import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
  * Created by lenovo on 10/21/2017.
  */
 
-public interface IUpdatable<T extends EntityBase> {
-    T update(ResidentEntity residentEntity);
+public interface IUpdatable {
+    void update(ResidentEntity residentEntity);
 }

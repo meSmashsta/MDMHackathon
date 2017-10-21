@@ -1,6 +1,8 @@
 package com.blazingmuffin.health.mdmsystem.other.repositories;
 
 import com.blazingmuffin.health.mdmsystem.other.interfaces.IUpdatable;
+import com.blazingmuffin.health.mdmsystem.other.models.EntityBase;
+import com.blazingmuffin.health.mdmsystem.other.models.MDMContext;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
@@ -8,16 +10,21 @@ import com.couchbase.lite.Document;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Mapper;
+import com.couchbase.lite.QueryEnumerator;
+import com.couchbase.lite.UnsavedRevision;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by lenovo on 10/21/2017.
  */
 
 public class ResidentRepository extends RepositoryBase<ResidentEntity> {
-    private IUpdatable<ResidentEntity> IUpdatable;
+    private IUpdatable IUpdatable;
 
     public ResidentRepository (Database database) {
         super(database);
@@ -49,22 +56,38 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
         return residentEntity;
     }
 
-    public IUpdatable<ResidentEntity> getIUpdatable() {
+    public IUpdatable getIUpdatable() {
         return IUpdatable;
     }
 
-    public void setIUpdatable(IUpdatable<ResidentEntity> IUpdatable) {
+    public void setIUpdatable(IUpdatable IUpdatable) {
         this.IUpdatable = IUpdatable;
     }
 
     @Override
-    public ResidentEntity update(ResidentEntity residentEntity) {
-        return IUpdatable.update(residentEntity);
+    public void update(ResidentEntity residentEntity) {
+        IUpdatable.update(residentEntity);
     }
 
     @Override
-    public boolean delete(ResidentEntity entity) {
-        return false;
+    public void delete(ResidentEntity residentEntity) {
+        Document residentDocument = mDatabase.getDocument(residentEntity.getId());
+        try {
+            residentDocument.update(new Document.DocumentUpdater() {
+                @Override
+                public boolean update(UnsavedRevision newRevision) {
+                    newRevision.setIsDeletion(true);
+                    Map<String, Object> properties = newRevision.getUserProperties();
+                    Date date = new Date();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                    properties.put(EntityBase.DELETED_AT, simpleDateFormat.format(date));
+                    newRevision.setUserProperties(properties);
+                    return true;
+                }
+            });
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -80,7 +103,6 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
                 }
             }, ResidentEntity.VIEW_VERSION);
         }
-
         LiveQuery liveQuery = cview.createQuery().toLiveQuery();
         return liveQuery;
     }

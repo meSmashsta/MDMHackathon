@@ -34,6 +34,7 @@ public class ResidentEntity extends EntityBase {
         setLastName(residentDocument.getProperty(LAST_NAME).toString());
         setGender(residentDocument.getProperty(GENDER).toString());
         setBirthdate(residentDocument.getProperty(BIRTHDATE).toString());
+        setId(residentDocument.getId());
     }
 
     public String getFirstName() {
@@ -58,6 +59,10 @@ public class ResidentEntity extends EntityBase {
 
     public void setLastName(String lastName) {
         this.mLastName = lastName;
+    }
+
+    public String getFullName() {
+        return String.format("%1$s %2$s", getFirstName(), getLastName());
     }
 
     public String getGender() {

@@ -25,7 +25,7 @@ public abstract class RepositoryBase<T extends EntityBase> {
 
     public abstract T get(String id);
     public abstract T create(T entity);
-    public abstract T update(T entity);
-    public abstract boolean delete(T entity);
+    public abstract void update(T entity);
+    public abstract void delete(T entity);
     public abstract LiveQuery list();
 }
