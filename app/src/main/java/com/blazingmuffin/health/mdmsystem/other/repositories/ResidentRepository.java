@@ -6,14 +6,13 @@ import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
-import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
-import com.couchbase.lite.Mapper;
 import com.couchbase.lite.UnsavedRevision;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -29,9 +28,7 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
 
     @Override
     public ResidentEntity get(String id) {
-        Document residentDocument = mDatabase.getDocument(id);
-        ResidentEntity residentEntity = new ResidentEntity(residentDocument);
-        return residentEntity;
+        return new ResidentEntity(getDatabase().getDocument(id));
     }
 
     @Override
@@ -43,7 +40,7 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
         properties.put(ResidentEntity.GENDER, residentEntity.getGender());
         properties.put(ResidentEntity.BIRTHDATE, residentEntity.getBirthdate());
         properties.put(ResidentEntity.TYPE, ResidentEntity.TYPE_VALUE);
-        Document residentDocument = mDatabase.createDocument();
+        Document residentDocument = getDatabase().createDocument();
         try {
             residentDocument.putProperties(properties);
         } catch (CouchbaseLiteException e) {
@@ -51,6 +48,34 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
         }
         residentEntity.setId(residentDocument.getId());
         return residentEntity;
+    }
+
+    @Override
+    public void update(ResidentEntity residentEntity) {
+        IUpdatable.update(residentEntity);
+    }
+
+    @Override
+    public void delete(ResidentEntity residentEntity) {
+        Document residentDocument = getDatabase().getDocument(residentEntity.getId());
+        try {
+            residentDocument.update(ResidentRepository::delete);
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public LiveQuery list() {
+        com.couchbase.lite.View view = getDatabase().getView(ResidentEntity.VIEW);
+        if (view.getMap() == null) {
+            view.setMap((document, emitter) -> {
+                if (document.get(ResidentEntity.TYPE).toString().equalsIgnoreCase(ResidentEntity.TYPE_VALUE)) {
+                    emitter.emit(document, document.get(ResidentEntity.FIRST_NAME));
+                }
+            }, ResidentEntity.VIEW_VERSION);
+        }
+        return view.createQuery().toLiveQuery();
     }
 
     public IUpdatable getIUpdatable() {
@@ -61,46 +86,12 @@ public class ResidentRepository extends RepositoryBase<ResidentEntity> {
         this.IUpdatable = IUpdatable;
     }
 
-    @Override
-    public void update(ResidentEntity residentEntity) {
-        IUpdatable.update(residentEntity);
-    }
-
-    @Override
-    public void delete(ResidentEntity residentEntity) {
-        Document residentDocument = mDatabase.getDocument(residentEntity.getId());
-        try {
-            residentDocument.update(new Document.DocumentUpdater() {
-                @Override
-                public boolean update(UnsavedRevision newRevision) {
-                    newRevision.setIsDeletion(true);
-                    Map<String, Object> properties = newRevision.getUserProperties();
-                    Date date = new Date();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
-                    properties.put(EntityBase.DELETED_AT, simpleDateFormat.format(date));
-                    newRevision.setUserProperties(properties);
-                    return true;
-                }
-            });
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public LiveQuery list() {
-        com.couchbase.lite.View cview = mDatabase.getView(ResidentEntity.VIEW);
-        if (cview.getMap() == null) {
-            cview.setMap(new Mapper() {
-                @Override
-                public void map(Map<String, Object> document, Emitter emitter) {
-                    if (document.get(ResidentEntity.TYPE).toString().equalsIgnoreCase(ResidentEntity.TYPE_VALUE)) {
-                        emitter.emit(document, document.get(ResidentEntity.FIRST_NAME));
-                    }
-                }
-            }, ResidentEntity.VIEW_VERSION);
-        }
-        LiveQuery liveQuery = cview.createQuery().toLiveQuery();
-        return liveQuery;
+    private static boolean delete(UnsavedRevision revision) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        Map<String, Object> properties = revision.getUserProperties();
+        properties.put(EntityBase.DELETED_AT, simpleDateFormat.format(new Date()));
+        revision.setUserProperties(properties);
+        revision.setIsDeletion(true);
+        return true;
     }
 }

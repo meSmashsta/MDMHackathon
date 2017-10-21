@@ -8,19 +8,15 @@ import com.couchbase.lite.LiveQuery;
  * Created by lenovo on 10/21/2017.
  */
 
-public abstract class RepositoryBase<T extends EntityBase> {
-    protected Database mDatabase;
+abstract class RepositoryBase<T extends EntityBase> {
+    private final Database mDatabase;
 
     public RepositoryBase (Database database) {
-        setDatabase(database);
+        this.mDatabase = database;
     }
 
-    public Database getDatabase() {
+    Database getDatabase() {
         return mDatabase;
-    }
-
-    public void setDatabase(Database database) {
-        mDatabase = database;
     }
 
     public abstract T get(String id);
