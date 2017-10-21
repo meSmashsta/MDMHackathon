@@ -32,5 +32,9 @@ dependencies {
     compile 'de.mannodermaus.rxjava2:rxbonjour:2.0.0-RC1'
     compile 'de.mannodermaus.rxjava2:rxbonjour-platform-android:2.0.0-RC1'
     compile 'de.mannodermaus.rxjava2:rxbonjour-driver-nsdmanager:2.0.0-RC1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.0'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.0'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.0'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.0'
     testCompile 'junit:junit:4.12'
 }
