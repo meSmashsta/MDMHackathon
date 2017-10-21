@@ -2,6 +2,7 @@ package com.blazingmuffin.health.mdmsystem.other.repositories;
 
 import com.blazingmuffin.health.mdmsystem.other.models.EntityBase;
 import com.couchbase.lite.Database;
+import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
 
 /**
@@ -24,8 +25,8 @@ public abstract class RepositoryBase<T extends EntityBase> {
     }
 
     public abstract T get(String id);
-    public abstract T save(T entity);
-    public abstract boolean edit(T entity);
+    public abstract T create(T entity);
+    public abstract T update(T entity);
     public abstract boolean delete(T entity);
-    public abstract QueryEnumerator list();
+    public abstract LiveQuery list();
 }
