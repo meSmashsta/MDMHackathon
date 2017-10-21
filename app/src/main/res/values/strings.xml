@@ -2,9 +2,11 @@
     <string name="app_name">MDM System</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="general_database_name">mdm</string>
+    <string name="general_default_sgw">http://kristhiantiu.com:4984/curis-syncgw</string>
     <string name="button_save">Save</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
+    <string name="peer_message_connect_button">Connect</string>
     <string name="sidebar_records">Records</string>
     <string name="sidebar_settings">Settings</string>
 </resources>

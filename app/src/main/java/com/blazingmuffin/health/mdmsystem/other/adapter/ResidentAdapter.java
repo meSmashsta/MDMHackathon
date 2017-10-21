@@ -55,7 +55,7 @@ public class ResidentAdapter extends RecyclerView.Adapter<ResidentAdapter.Reside
         public TextView mFullName;
         public ResidentViewHolder(View view) {
             super(view);
-            mFullName = (TextView) view.findViewById(R.id.tv_item_resident_full_name);
+            mFullName = view.findViewById(R.id.tv_item_resident_full_name);
         }
     }
 }

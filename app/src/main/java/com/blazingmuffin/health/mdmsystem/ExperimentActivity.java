@@ -4,17 +4,11 @@ import android.annotation.SuppressLint;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.util.Log;
-import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.couchbase.lite.CouchbaseLiteException;
@@ -43,23 +37,19 @@ import de.mannodermaus.rxbonjour.RxBonjour;
 import de.mannodermaus.rxbonjour.drivers.jmdns.JmDNSDriver;
 import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ExperimentActivity extends AppCompatActivity {
 
-
-    private static String TAG = "JEEPERS : MainActivity";
-
+    private static String TAG = "JEEPERS-CREEPERS";
     private FragmentManager mManager;
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
-    private Toolbar mToolbar;
-    private NavigationView mNavigationDrawer;
+    private TextView mExperimentUrlText;
+    private TextView mExperimentPeerUrlText;
 
     private String mSyncURLString = "";
     private String mRESTURLString;
@@ -72,98 +62,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String byDateViewName = "byDate";
     private Boolean mIsCBSyncRunning = false;
 
-    // service discovery and registration
-    protected RxBonjour mRxBonjour;
+    // bonjour
+    private RxBonjour mRxBonjour;
 
-    public RxBonjour getRxBonjour() {
-        return mRxBonjour;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_experiment);
 
+        mExperimentUrlText = findViewById(R.id.experimentURLText);
+        mExperimentPeerUrlText = findViewById(R.id.experimentPeerURLText);
 
-        mToolbar = findViewById(R.id.toolbar_general_layout);
-        setSupportActionBar(mToolbar);
+        //sync to server must be set manually on settings page
+        //mSyncURLString = getString(R.string.general_default_sgw);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
-        mActionBarDrawerToggle.syncState();
-        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mNavigationDrawer = findViewById(R.id.navigation_views);
-        mNavigationDrawer.setNavigationItemSelectedListener(this);
-
-        startServices();
-
-        mManager = getSupportFragmentManager();
-//
-        ResidentFragment residentFragment = new ResidentFragment();
-        FragmentTransaction transaction = mManager.beginTransaction();
-        transaction.add(R.id.linear_fragment_container, residentFragment, "resident");
-        transaction.commit();
-
-
-//        SettingsFragment settingsFragment = new SettingsFragment();
-//        FragmentTransaction transaction = mManager.beginTransaction();
-//        transaction.add(R.id.linear_fragment_container, settingsFragment, "resident");
-//        transaction.commit();
-
-        //PeerFragment peerFragment = new PeerFragment();
-        //FragmentTransaction transaction = mManager.beginTransaction();
-        //transaction.add(R.id.linear_fragment_container, peerFragment, "resident");
-        //transaction.commit();
-
-        //SettingsFragment settingsFragment = new SettingsFragment();
-        //FragmentTransaction transaction = mManager.beginTransaction();
-        //transaction.add(R.id.linear_fragment_container, settingsFragment, "resident");
-        //transaction.commit();
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction fragmentTransaction = mManager.beginTransaction();
-        switch (item.getItemId()) {
-            case R.id.item_residents:
-                ResidentFragment residentFragment = new ResidentFragment();
-                fragmentTransaction.replace(
-
-                        R.id.linear_fragment_container, residentFragment, "resident");
-                break;
-            case R.id.item_settings:
-                SettingsFragment settingsFragment = new SettingsFragment();
-                fragmentTransaction.replace(R.id.linear_fragment_container, settingsFragment, "resident");
-                break;
-        }
-        fragmentTransaction.commit();
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-
-    private void startServices(){
         try {
             startCouchbaseLite();
             startCBSyncing();
             startRESTListener();
-            //mRESTURLString = getRESTListenerURL();
-            //mExperimentUrlText.setText(mRESTURLString);
+            mRESTURLString = getRESTListenerURL();
+            mExperimentUrlText.setText(mRESTURLString);
             mRxBonjour = (new RxBonjour.Builder()).platform(AndroidPlatform.create(this)).driver(JmDNSDriver.create()).create();
             broadcastService();
-            // call discover on Peer Fragment
-            //startDiscover();
+            startDiscover();
         } catch (CouchbaseLiteException e){
             Toast.makeText(getApplicationContext(), "DB : Get Database went wrong.", Toast.LENGTH_LONG);
             Log.d(TAG, "Can not create initialize CB Lite");
@@ -174,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "DONE!");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     private void startCouchbaseLite() throws IOException, CouchbaseLiteException {
         Manager.enableLogging(TAG, Log.VERBOSE);
@@ -309,8 +235,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
     }
 
-    protected Observable<BonjourEvent> startDiscover (){
-        return mRxBonjour.newDiscovery("_http._tcp")
+    private void startDiscover(){
+        mRxBonjour.newDiscovery("_http._tcp")
                 .filter(
                         new Predicate<BonjourEvent>() {
                             @Override
@@ -320,9 +246,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 return is_correct_service && is_diff_address;
                             }
                         }
-                );
+                )
                 //.filter(e -> e.getService().getHost().getHostAddress().compareTo(getIPAddressDeprecated()) == -1)
                 //.filter(e -> e.getService().getName().startsWith(getString(R.string.general_database_name)))
-                //.subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BonjourEvent>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                        Log.d(TAG,"DISCOVER : onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.annotations.NonNull BonjourEvent bonjourEvent) {
+                        Log.d(TAG,"DISCOVER : onNext");
+                        String ipadd = bonjourEvent.getService().getHost().getHostAddress();
+                        int port = bonjourEvent.getService().getPort();
+                        try {
+                            final URL url = new URL("http", ipadd, port, "/" + getString(R.string.general_database_name));
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    mExperimentPeerUrlText.setText(url.toString());
+                                    Toast.makeText(getApplicationContext(), url.toString(), Toast.LENGTH_LONG);
+                                    Log.d(TAG, url.toString());
+                                }
+                            });
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                        Log.d(TAG,"DISCOVER : onError");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG,"DISCOVER : onComplete");
+                    }
+                });
     }//--startDiscover
 }

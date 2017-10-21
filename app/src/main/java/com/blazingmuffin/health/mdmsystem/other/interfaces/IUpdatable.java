@@ -1,6 +1,5 @@
 package com.blazingmuffin.health.mdmsystem.other.interfaces;
 
-import com.blazingmuffin.health.mdmsystem.other.models.EntityBase;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 
 /**

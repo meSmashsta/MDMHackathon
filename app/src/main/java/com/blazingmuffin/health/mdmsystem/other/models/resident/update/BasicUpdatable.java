@@ -2,7 +2,6 @@ package com.blazingmuffin.health.mdmsystem.other.models.resident.update;
 
 import com.blazingmuffin.health.mdmsystem.other.interfaces.IUpdatable;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
-import com.blazingmuffin.health.mdmsystem.other.repositories.ResidentRepository;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;

@@ -18,16 +18,13 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Mapper;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.Map;
-
-import com.couchbase.lite.Query;
-import com.jakewharton.rxbinding2.view.RxView;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lenovo on 10/21/2017.
