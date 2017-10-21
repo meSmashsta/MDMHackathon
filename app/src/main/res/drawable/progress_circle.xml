@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?><!--<layer-list>-->
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="0"
+    android:toDegrees="2880">
+    <layer-list>
+        <item>
+            <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromDegrees="-90"
+                android:toDegrees="-90">
+                <shape
+                    android:innerRadiusRatio="3.5"
+                    android:shape="ring"
+                    android:thickness="10dp"
+                    android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
+                    <gradient
+                        android:angle="0"
+                        android:endColor="@color/colorAimGreen"
+                        android:startColor="@color/colorAimGreen"
+                        android:type="sweep"
+                        android:useLevel="false" />
+                </shape>
+            </rotate>
+        </item>
+        <item>
+            <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromDegrees="0"
+                android:toDegrees="90">
+                <shape
+                    android:innerRadiusRatio="4.5"
+                    android:shape="ring"
+                    android:thickness="20dp"
+                    android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
+                    <gradient
+                        android:angle="0"
+                        android:endColor="@color/colorAimYellow"
+                        android:startColor="@color/colorAimYellow"
+                        android:useLevel="false" />
+                </shape>
+            </rotate>
+        </item>
+        <item>
+            <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromDegrees="30"
+                android:toDegrees="270">
+                <shape
+                    android:innerRadiusRatio="7"
+                    android:shape="ring"
+                    android:thickness="10dp"
+                    android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
+                    <gradient
+                        android:angle="0"
+                        android:endColor="@color/colorAimBlue"
+                        android:startColor="@color/colorAimBlue"
+                        android:useLevel="true" />
+                </shape>
+            </rotate>
+        </item>
+        <item>
+            <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromDegrees="270"
+                android:toDegrees="30">
+                <shape
+                    android:innerRadiusRatio="7.5"
+                    android:shape="ring"
+                    android:thickness="10dp"
+                    android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
+
+                    <gradient
+                        android:angle="0"
+                        android:endColor="@color/colorAimDarkPurple"
+                        android:startColor="@color/colorAimGreen"
+                        android:type="sweep"
+                        android:useLevel="true" />
+                </shape>
+            </rotate>
+        </item>
+        <item>
+            <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromDegrees="90"
+                android:toDegrees="0">
+                <shape
+                    android:innerRadiusRatio="5"
+                    android:shape="ring"
+                    android:thickness="10dp"
+                    android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
+                    <gradient
+                        android:angle="0"
+                        android:endColor="@color/colorAimDarkPurple"
+                        android:startColor="@color/colorAimDarkPurple"
+                        android:type="sweep"
+                        android:useLevel="true" />
+                </shape>
+            </rotate>
+        </item>
+        <item>
+            <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromDegrees="270"
+                android:toDegrees="0">
+                <shape
+                    android:innerRadiusRatio="3.0"
+                    android:shape="ring"
+                    android:thickness="12dp"
+                    android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
+                    <gradient
+                        android:angle="0"
+                        android:centerColor="@color/colorAimDarkPurple"
+                        android:endColor="@color/colorAimBlue"
+                        android:startColor="@color/colorAimBlue"
+                        android:type="sweep"
+                        android:useLevel="false" />
+                </shape>
+            </rotate>
+        </item>
+    </layer-list>
+</rotate>

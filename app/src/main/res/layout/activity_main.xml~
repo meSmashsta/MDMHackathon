@@ -6,7 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
+<<<<<<< HEAD
+    android:background="#FFFFFF"
+=======
     android:background="#ffffff"
+>>>>>>> f62b96a6523921c0fe44c6590b079a1ac0d088c6
     tools:context="com.blazingmuffin.health.mdmsystem.MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +25,7 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
         </FrameLayout>
+<<<<<<< HEAD
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
@@ -37,4 +42,13 @@
         android:layout_gravity="start"
         app:menu="@menu/drawer_menu">
     </android.support.design.widget.NavigationView>
+=======
+    </LinearLayout>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu"></android.support.design.widget.NavigationView>
+>>>>>>> f62b96a6523921c0fe44c6590b079a1ac0d088c6
 </android.support.v4.widget.DrawerLayout>

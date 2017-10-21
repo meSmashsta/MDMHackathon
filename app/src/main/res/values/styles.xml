@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- checkbox theme. -->
+    <style name="checkBoxComponent" parent="AppTheme">
+        //Checked color
+        <item name="colorAccent">@color/colorAimGreen</item>
+        //Checkbox border color
+        <item name="android:textColorSecondary">@color/colorAimBlue</item>
+    </style>
+
+    <!-- radiobutton theme. -->
+    <style name="radioButtonComponent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/colorAimGreen</item>
+        <item name="android:textColorSecondary">@color/colorAimBlue</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
 </resources>

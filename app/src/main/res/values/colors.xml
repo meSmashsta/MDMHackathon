@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAimYellow">#FCCE3A</color>
+    <color name="colorAimGreen">#148C55</color>
+    <color name="colorAimBlue">#1899BE</color>
+    <color name="colorAimPurple">#613463</color>
+    <color name="colorAimDarkPurple">#302C43</color>
+    <color name="colorAimWhite">#000000</color>
+    <color name="colorAimShadow">#e74c3c</color>
 </resources>

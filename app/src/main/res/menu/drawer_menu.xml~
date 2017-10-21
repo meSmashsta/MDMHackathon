@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+<<<<<<< HEAD
             android:icon="@drawable/ic_settings_black"
             android:checked="true"
             android:id="@+id/item_residents"
@@ -10,5 +11,12 @@
             android:icon="@drawable/ic_supervisor_account_black"
             android:id="@+id/item_settings"
             android:title="@string/sidebar_settings"/>
+=======
+            android:id="@+id/item_residents"
+            android:title="Residents"/>
+        <item
+            android:id="@+id/item_settings"
+            android:title="Settings"/>
+>>>>>>> f62b96a6523921c0fe44c6590b079a1ac0d088c6
     </group>
 </menu>

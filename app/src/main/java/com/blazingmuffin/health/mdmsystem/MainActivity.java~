@@ -32,7 +32,11 @@ implements NavigationView.OnNavigationItemSelectedListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         mToolbar = (Toolbar) findViewById(R.id.toolbar_general_layout);
+=======
+        mToolbar = findViewById(R.id.toolbar_general_layout);
+>>>>>>> f62b96a6523921c0fe44c6590b079a1ac0d088c6
         setSupportActionBar(mToolbar);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -40,7 +44,11 @@ implements NavigationView.OnNavigationItemSelectedListener {
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+<<<<<<< HEAD
         mNavigationDrawer = (NavigationView) findViewById(R.id.navigation_views);
+=======
+        mNavigationDrawer = findViewById(R.id.navigation_view);
+>>>>>>> f62b96a6523921c0fe44c6590b079a1ac0d088c6
         mNavigationDrawer.setNavigationItemSelectedListener(this);
 
         mManager = getSupportFragmentManager();
@@ -64,9 +72,30 @@ implements NavigationView.OnNavigationItemSelectedListener {
         switch (item.getItemId()) {
             case R.id.item_residents:
                 ResidentFragment residentFragment = new ResidentFragment();
-                fragmentTransaction.replace(
+                fragmentTransaction.replace(R.id.linear_fragment_container, residentFragment, "resident");
+                break;
+            case R.id.item_settings:
+                SettingsFragment settingsFragment = new SettingsFragment();
+                fragmentTransaction.replace(R.id.linear_fragment_container, settingsFragment, "resident");
+                break;
+        }
+        fragmentTransaction.commit();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
-                        R.id.linear_fragment_container, residentFragment, "resident");
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return mActionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FragmentTransaction fragmentTransaction = mManager.beginTransaction();
+        switch (item.getItemId()) {
+            case R.id.item_residents:
+                ResidentFragment residentFragment = new ResidentFragment();
+                fragmentTransaction.replace(R.id.linear_fragment_container, residentFragment, "resident");
                 break;
             case R.id.item_settings:
                 SettingsFragment settingsFragment = new SettingsFragment();
