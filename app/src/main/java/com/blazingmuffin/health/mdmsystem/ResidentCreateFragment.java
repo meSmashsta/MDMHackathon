@@ -42,8 +42,8 @@ public class ResidentCreateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resident_create_layout, container, false);
-
         mMainActivity = (MainActivity) getActivity();
+        mMainActivity.hideFloatingActionButton();
         mManager = mMainActivity.getManager();
         mResidentRepository = mMainActivity.getResidentRepository();
 

@@ -35,6 +35,7 @@ public class ResidentDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resident_details_layout, container, false);
         mMainActivity = (MainActivity) getActivity();
+        mMainActivity.hideFloatingActionButton();
         mResidentEntity = mMainActivity.getResidentEntity();
         mManager = mMainActivity.getManager();
 

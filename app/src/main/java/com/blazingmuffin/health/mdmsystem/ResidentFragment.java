@@ -51,6 +51,18 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
     private Disposable mDatabaseChanges;
     private LiveQuery mQuery ;
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mMainActivity.getFloatingAddButton().setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMainActivity.getFloatingAddButton().setVisibility(View.VISIBLE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,29 +76,44 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
 
         mResidentAdapter = new ResidentAdapter(this, mMainActivity.getResidentRepository());
         mRecyclerView.setAdapter(mResidentAdapter);
+        mMainActivity.getFloatingAddButton().setVisibility(View.VISIBLE);
+        mAddClicks = RxView.clicks(mMainActivity.getFloatingAddButton()).subscribe(x -> {
+//            mMainActivity.hideFloatingActionButton();
 
-        mAddClicks = RxView.clicks(view.findViewById(R.id.btn_resident_add))
-                .subscribe(x -> {
-                            ResidentFragment residentFragment = new ResidentFragment();
-                            FragmentTransaction transaction = mManager.beginTransaction();
-                            transaction.replace(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
-                            transaction.addToBackStack(getString(R.string.tag_resident_details_fragment_backstack));
-                            transaction.commit();
+            ResidentFragment residentFragment = new ResidentFragment();
+            FragmentTransaction transaction = mManager.beginTransaction();
+            transaction.replace(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
+            transaction.addToBackStack(getString(R.string.tag_resident_details_fragment_backstack));
+            transaction.commit();
 
-                            ResidentCreateFragment residentCreateFragment = new ResidentCreateFragment();
-                            FragmentTransaction fragmentTransaction = mManager.beginTransaction();
-                            fragmentTransaction.add(R.id.linear_fragment_container, residentCreateFragment, getString(R.string.tag_resident_create_fragment));
-                            fragmentTransaction.commit();
-//                            ResidentRepository residentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
-//                            ResidentEntity residentEntity = new ResidentEntity();
-//                            residentEntity.setFirstName("Mycar");
-//                            residentEntity.setMiddleName("Pena");
-//                            residentEntity.setLastName("Chu");
-//                            residentEntity.setBirthdate("12/05/1994");
-//                            residentEntity.setGender("Male");
-//                            residentRepository.create(residentEntity);
-                        }
-                );
+            ResidentCreateFragment residentCreateFragment = new ResidentCreateFragment();
+            FragmentTransaction fragmentTransaction = mManager.beginTransaction();
+            fragmentTransaction.add(R.id.linear_fragment_container, residentCreateFragment, getString(R.string.tag_resident_create_fragment));
+            fragmentTransaction.commit();
+
+        });
+//        mAddClicks = RxView.clicks(view.findViewById(R.id.btn_resident_add))
+//                .subscribe(x -> {
+//                            ResidentFragment residentFragment = new ResidentFragment();
+//                            FragmentTransaction transaction = mManager.beginTransaction();
+//                            transaction.replace(R.id.linear_fragment_container, residentFragment, getString(R.string.tag_resident_fragment));
+//                            transaction.addToBackStack(getString(R.string.tag_resident_details_fragment_backstack));
+//                            transaction.commit();
+//
+//                            ResidentCreateFragment residentCreateFragment = new ResidentCreateFragment();
+//                            FragmentTransaction fragmentTransaction = mManager.beginTransaction();
+//                            fragmentTransaction.add(R.id.linear_fragment_container, residentCreateFragment, getString(R.string.tag_resident_create_fragment));
+//                            fragmentTransaction.commit();
+////                            ResidentRepository residentRepository = new ResidentRepository(MDMContext.Instance(getActivity()));
+////                            ResidentEntity residentEntity = new ResidentEntity();
+////                            residentEntity.setFirstName("Mycar");
+////                            residentEntity.setMiddleName("Pena");
+////                            residentEntity.setLastName("Chu");
+////                            residentEntity.setBirthdate("12/05/1994");
+////                            residentEntity.setGender("Male");
+////                            residentRepository.create(residentEntity);
+//                        }
+//                );
         mManager = ((MainActivity) getActivity()).getManager();
 
 //        mEdit = (Button) view.findViewById(R.id.btn_resident_edit);
@@ -113,7 +140,7 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
 //                mResidentRepository.delete(residentEntity);
 //            }
 //        });
-        
+
         Database db = MDMContext.Instance(getContext());
         com.couchbase.lite.View cview = db.getView(ResidentEntity.VIEW);
         if (cview.getMap() == null) {
@@ -142,9 +169,10 @@ public class ResidentFragment extends Fragment implements ResidentAdapter.IRecyc
         }).subscribeOn(Schedulers.io())
          .observeOn(AndroidSchedulers.mainThread())
         .subscribe(e -> {
-            if (e.getRows() != null)
+            if (e.getRows() != null && getActivity() != null ) {
                 Toast.makeText(getActivity(), "Updated..." + e.getRows().getCount(), Toast.LENGTH_LONG).show();
-            mResidentAdapter.setResidents(e.getRows());
+                mResidentAdapter.setResidents(e.getRows());
+            }
         });
 
         return view;

@@ -105,6 +105,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
+    public FloatingActionButton getFloatingAddButton() {
+        return this.mFloatingAddButton;
+    }
+
+    public void hideFloatingActionButton() {
+        this.mFloatingAddButton.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction fragmentTransaction = mManager.beginTransaction();
