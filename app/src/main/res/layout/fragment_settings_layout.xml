@@ -10,47 +10,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
-        <EditText android:id="@+id/input_email"
+        <EditText android:id="@+id/server_url_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorAimDarkPurple"
             android:inputType="text"
-            android:hint="Settings" />
+            android:hint="Server URL" />
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.v7.widget.AppCompatCheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/checkBoxComponent"
-        android:text="Checkbox" />
-    <android.support.v7.widget.AppCompatRadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/radioButtonComponent"
-        android:text="Radiobutton" />
-
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text" />
     <Button
-        android:id="@+id/button"
+        android:id="@+id/upload_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAimBlue"
         android:textColor="@color/colorAimWhite"
         android:text="@string/button_save" />
+
     <ProgressBar
         android:id="@+id/timer_progress"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:indeterminateDrawable="@drawable/progress_circle"
         android:max="160"
-        android:indeterminateDrawable="@drawable/progress_circle" />
+        android:visibility="gone"/>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:src="@drawable/aim_logo"/>
+        android:src="@drawable/aim_logo"
+        android:visibility="gone"/>
 </LinearLayout>

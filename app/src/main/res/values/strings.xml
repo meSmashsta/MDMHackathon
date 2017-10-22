@@ -15,7 +15,7 @@
     <string name="tag_settings_fragment">settings</string>
 
     <string name="general_default_sgw">http://kristhiantiu.com:4984/curis-syncgw</string>
-    <string name="button_save">Save</string>
+    <string name="button_save">Upload to Server</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
     <string name="peer_message_connect_button">Connect</string>
