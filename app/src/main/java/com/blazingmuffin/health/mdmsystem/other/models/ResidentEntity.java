@@ -2,7 +2,6 @@ package com.blazingmuffin.health.mdmsystem.other.models;
 
 import com.couchbase.lite.Document;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

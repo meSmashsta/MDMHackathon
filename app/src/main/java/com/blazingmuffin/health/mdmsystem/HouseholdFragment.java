@@ -16,9 +16,7 @@ import android.widget.RadioGroup;
 import com.blazingmuffin.health.mdmsystem.other.models.ResidentEntity;
 import com.blazingmuffin.health.mdmsystem.other.models.resident.update.HouseholdUpdatable;
 import com.blazingmuffin.health.mdmsystem.other.repositories.ResidentRepository;
-import com.blazingmuffin.health.mdmsystem.utils.WidgetUtils;
 import com.couchbase.lite.Document;
-import com.couchbase.lite.Manager;
 
 /**
  * Created by lenovo on 10/22/2017.
@@ -51,11 +49,11 @@ public class HouseholdFragment extends Fragment {
         mResidentEntity = mMainActivity.getResidentEntity();
         mManager = mMainActivity.getManager();
 
-        mNoOfFamily = (EditText) view.findViewById(R.id.et_house_hold_no_of_family);
-        mNoOfPeople = (EditText) view.findViewById(R.id.et_house_hold_no_of_people);
-        m4Ps = (RadioGroup) view.findViewById(R.id.rg_house_hold_is_4ps);
-        m4PsYes = (RadioButton) view.findViewById(R.id.rb_house_hold_is_4ps);
-        m4PsNo = (RadioButton) view.findViewById(R.id.rb_house_hold_not_4ps);
+        mNoOfFamily = view.findViewById(R.id.et_house_hold_no_of_family);
+        mNoOfPeople = view.findViewById(R.id.et_house_hold_no_of_people);
+        m4Ps = view.findViewById(R.id.rg_house_hold_is_4ps);
+        m4PsYes = view.findViewById(R.id.rb_house_hold_is_4ps);
+        m4PsNo = view.findViewById(R.id.rb_house_hold_not_4ps);
 
         Document document = mMainActivity.getDatabase().getDocument(mResidentEntity.getId());
         if (mResidentEntity.getProperty(document, ResidentEntity.HOUSEHOLD) != null) {
@@ -66,7 +64,7 @@ public class HouseholdFragment extends Fragment {
             check4Ps(household.isFamily4PsMember());
         }
 
-        mSave = (Button) view.findViewById(R.id.btn_house_hold_save);
+        mSave = view.findViewById(R.id.btn_house_hold_save);
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
